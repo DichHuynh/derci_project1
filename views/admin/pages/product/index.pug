@@ -67,19 +67,39 @@ block main
               td #{item.price}$
               td 
                 if(item.status =='active')
-                  a(href="#" class="badge badge-success") hoạt động
+                  a(
+                    href="javascript:" 
+                    class="badge badge-success"
+                    data-status= item.status 
+                    data-id= item.id
+                    button-change-status
+                    ) hoạt động
                 else 
-                  a(href="#" class="badge badge-danger") dừng hoạt động
+                  a(
+                    href="javascript:" 
+                    data-status = item.status 
+                    data-id = item.id
+                    button-change-status
+                    class="badge badge-danger") dừng hoạt động
               td 
                 button(class="btn btn-warning btn-sm") Sửa
                 button(class="btn btn-danger btn-sm ml-1") Xóa
+
+  //- thêm form để gửi lên phần thay đổi trạng thái sản phẩm
+  form(
+    action=""
+    method="POST"
+    id="form-change-status"
+    data-path="/admin/product/change-status"
+  )
+
   nav
     ul(class="pagination")
       if(pagination.currentPage > 1)
         li(class="page-item ")
         button(
           class="page-link"
-          button-pagination=pagination.currentPage
+          button-pagination=pagination.currentPage - 1
         ) Trang trước
       - for (var i = 1; i <= totalPage; i++)
         li(class=`page-item ${pagination.currentPage == i ? "active": ""}`)
@@ -91,6 +111,7 @@ block main
         li(class="page-item ")
         button(
           class="page-link"
-          button-pagination=pagination.currentPage
+          button-pagination=pagination.currentPage + 1
         ) Trang tiếp
-          
+
+    script(src="/admin/js/productScript.js")       

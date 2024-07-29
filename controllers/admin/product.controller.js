@@ -57,3 +57,13 @@ module.exports.index = async (req, res) => {
         pagination: pagination
     });
 };
+
+// Tính năng thay đổi trạng thái sản phẩm.
+module.exports.changeStatus = async (req, res) => {
+    const id = req.params.id;
+    const status = req.params.status;
+    
+    await Product.updateOne({_id:id}, {"status": status});
+    res.redirect("back");
+}
+
