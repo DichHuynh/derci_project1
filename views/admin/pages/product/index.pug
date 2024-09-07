@@ -1,6 +1,14 @@
 extends ../../layouts/default.pug
 
 block main 
+  - if(messages.success)
+    .message.info 
+      div(
+        class="alert alert-success"
+        show-alert 
+        data-time="5000"
+      ) #{messages.success} <span close-alert> x </span> 
+      
   h1 Trang sản phẩm
 
   .card.mb-3
@@ -43,18 +51,57 @@ block main
   .card.mb-3 
     .card-header Danh sách sản phẩm
     .card-body
-      table.table.table-hover.table-sm 
+      .row 
+        .col-8
+          //- Tạo form cập nhật ô trạng thái và ô id
+          form(
+            action=`/admin/product/change-multi?_method=PATCH`
+            method="post"
+            form-change-multi
+          )
+            .d-flex.align-items-start
+              .form-group
+                select(name="type" class="form-control")
+                  option(disable selected) ------------
+                  option(value="active") Hoạt động
+                  option(value="inactive") Ngưng hoạt động
+                  option(value="delete-all") Xóa tất cả
+                  option(value="change-position") Thay đổi tất cả
+              .form-group 
+                input(
+                  type="text",
+                  name="ids",
+                  value="",
+                  class="form-control d-none"
+                )
+              button(type="submit"  class="btn-btn-primary") Áp dụng
+        //- thêm mới sản phẩm
+        .col-4 
+          a(
+            href = "/admin/product/create"
+            class = "btn btn-outline-success"
+          ) + Thêm mới
+      
+      table(
+        class= "table table-hover table-sm"
+        checkbox-multi
+      ) 
         thead 
           tr 
+            th 
+              input(type="checkbox" name="checkall")
             th STT 
             th Hình ảnh 
             th Tiêu đề
             th Giá
+            th Vị trí
             th Trạng thái 
             th Hành động
         tbody
           each item, index in products 
             tr 
+              td 
+                input(type="checkbox" name="ids" value=item.id )
               td #{index + 1}
               td 
                 img(
@@ -65,6 +112,14 @@ block main
                 )
               td #{item.title}
               td #{item.price}$
+              td 
+                input(
+                  type="number"
+                  name="position"
+                  value=item.position
+                  style="width: 50px"
+                  min="1"
+                )
               td 
                 if(item.status =='active')
                   a(
@@ -82,8 +137,17 @@ block main
                     button-change-status
                     class="badge badge-danger") dừng hoạt động
               td 
-                button(class="btn btn-warning btn-sm") Sửa
-                button(class="btn btn-danger btn-sm ml-1") Xóa
+                a(
+                  href=`/admin/product/edit/${item.id}`
+                  class="btn btn-warning btn-sm") Sửa
+                a(
+                  href=`/admin/product/detail/${item.id}`
+                  class="btn btn-primary btn-sm") Chi tiết
+                button(
+                  class="btn btn-danger btn-sm ml-1"
+                  data-id= item.id 
+                  button-delete 
+                  ) Xóa
 
   //- thêm form để gửi lên phần thay đổi trạng thái sản phẩm
   form(
@@ -91,6 +155,14 @@ block main
     method="POST"
     id="form-change-status"
     data-path="/admin/product/change-status"
+  )
+  
+  //- Tạo form để xóa sản phẩm
+  form(
+    action=""
+    method="POST"
+    id="form-delete-product"
+    data-path="/admin/product/delete"
   )
 
   nav
@@ -114,4 +186,5 @@ block main
           button-pagination=pagination.currentPage + 1
         ) Trang tiếp
 
-    script(src="/admin/js/productScript.js")       
+  
+  script(src="/admin/js/productScript.js") 

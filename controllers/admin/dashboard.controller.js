@@ -1,5 +1,5 @@
 module.exports.index = (req, res) =>{
     res.render("admin/pages/dashboard/index.pug", {
-        title: "Admin page"
+        pageTitle: "Admin page"
     });
 }

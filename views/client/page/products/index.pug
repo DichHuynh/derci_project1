@@ -16,8 +16,9 @@ block main
                 src="/images/anhmau.jpg"
                 alt=item.title
               )
-            .inner-content  
-              h1.inner-title  #{item.title}
+            .inner-content
+              a(href=`/product/${item.slug}`)  
+                h1.inner-title  #{item.title}
               .inner-price-new #{item.newPrice}$
               .inner-price-old  #{item.price}$
               .inner-discount -#{item.discountPercentage}%

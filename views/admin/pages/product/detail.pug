@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+//- Tạo trang chi tiết sản phẩm
+block main
+  body 
+    if(product.title)
+      h1 #{product.title}
+    
+    if(product.price)
+      p Giá: <b> #{product.price}$ </b> 
+
+    if(product.discountPercentage)
+      p Giảm giá: <b> #{product.discountPercentage}% </b>
+
+    if(product.stock)
+      p Còn lại: <b> #{product.stock} </b>
+    
+    if(product.thumbnail)
+    img(src=product.thumbnail alt="Hình ảnh sản phẩm" width="200" height="200")
+
+    if(product.status)
+      p Trạng thái: 
+        if(product.status == "active")
+          span(class="badge badge-success") Hoạt động
+        else 
+          span(class="badge badge-danger") Không hoạt động
+    
+    if(product.position)
+      p Vị trí: <b> #{product.position} </b>
+    
+    if(product.description)
+      p Mô tả: #{product.description}
+
+    a(
+      href=`/admin/product/edit/${product.id}`
+      class="btn btn-warning"
+    ) Chỉnh sửa
+
+  script(src="/admin/js/product.js") 
