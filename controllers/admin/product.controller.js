@@ -47,7 +47,17 @@ module.exports.index = async (req, res) => {
     const productCount = await Product.countDocuments(find);
     const totalPage = Math.ceil(productCount / pagination.limit);
 
-    const product = await Product.find(find).limit(pagination.limit).skip(pagination.skip).sort({position:"desc"});
+    const sort = {};
+    if(req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue;
+    }else{
+        sort.position = "desc";
+    }
+
+    const product = await Product.find(find)
+    .limit(pagination.limit)
+    .skip(pagination.skip)
+    .sort(sort);
     res.render("admin/pages/product/index.pug", {
         pageTitle: 'Product Page',
         products: product,

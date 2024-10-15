@@ -1,0 +1,79 @@
+extends ../../layouts/default.pug
+
+block main 
+	h1(class="mb-4") Chỉnh sửa danh mục sản phẩm 
+
+	form(
+		action=`/admin/product-category/edit/${record.id}?_method=PUT`
+		method="POST"
+		enctype="multipart/form-data"
+		id="form-edit-product"
+		)
+		div(class="form-group")
+			label(for="title") Tên sản phẩm
+			input(
+				type="text"
+				class="form-control"
+				id="title"
+				name="title"
+        value=record.title 
+			)
+		div(class="form-group")
+			label(for="desc") Mô tả
+			textarea(
+				class="form-control"
+				id="desc"
+				name="description"
+				rows="4"
+			) #{record.description}
+		div(class="form-group")
+			label(for="thumbnail") Ảnh
+			img(
+				src=record.thumbnail
+				alt=record.title 
+			) 
+			input(
+				type="file"
+				class="form-control"
+				id="thumbnail"
+				name="thumbnail"
+				)
+		div(class="form-group")
+			label(for="posittion") Vị trí
+			input(
+				type="number"
+				class="form-control"
+				id="position"
+				name="position"
+				placeholder="Tự động tăng"
+				min="1"
+        value=record.position
+			)
+		div(class="form-group form-check form-check-inline")
+			input(
+				class="form-check-input"
+				type="radio"
+				name="status"
+				id="statusActive"
+				value="active"
+				checked = (record.status == "active"? true : false)
+			)
+			label(for="statusActive" class="form-check-label") hoạt động
+		div(class="form-group form-check form-check-inline")
+			input(
+				class="form-check-input"
+				type="radio"
+				name="status"
+				id="statusInActive"
+				value="inactive"
+        checked=(record.status == "inactive"? true : false)
+			)
+			label(for="statusActive" class="form-check-label") Dừng hoạt động
+		div(class="form-group")
+			button(
+				type="submit"
+				class="btn btn-primary"
+			) Cập nhật
+	
+	script(src="/admin/js/productScript.js")
+

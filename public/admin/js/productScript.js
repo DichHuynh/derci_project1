@@ -6,14 +6,14 @@ if(buttonsChangeStatus.length> 0){
         button.addEventListener("click", () => {
             const status = button.getAttribute("data-status");
             const id = button.getAttribute("data-id");
-            let statusChange = status == "active" ? "inactive" : "active";
+            let statusChange = status=="active" ? "inactive" : "active";
 
             const formChangeStatus = document.querySelector("#form-change-status")
             const dataPath = formChangeStatus.getAttribute("data-path");
             const action = `${dataPath}/${statusChange}/${id}?_method=PATCH`;
             
             formChangeStatus.setAttribute("action", action);
-            formChangeStatus.submit();     
+            formChangeStatus.submit();
     });
 });}
 //end form change status
@@ -115,7 +115,43 @@ if(showAlert){
         showAlert.classList.add("alert-hidden");
     },time);
 }
-closeAlert.addEventListener("click", ()=>{
-    showAlert.classList.add("alert-hidden");
-})
+if(closeAlert && showAlert){
+    closeAlert.addEventListener("click", ()=>{
+        showAlert.classList.add("alert-hidden");
+    })
+}
 // end message change status
+
+// sort
+const sort = document.querySelector("[sort]");
+if(sort){
+    let url = new URL(window.location.href);
+    const sortSelect = document.querySelector("[sort-select]");
+    const sortClear = document.querySelector("[sort-clear]");
+
+    sortSelect.addEventListener("change", (e) =>{
+        const [sortKey, sortValue] = e.target.value.split("-");
+        if(sortKey && sortValue){
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
+            window.location.href = url.href;
+            console.log(url.href);
+        }
+    })
+    sortClear.addEventListener("click", ()=>{
+        url.searchParams.delete("sortKey");
+        url.searchParams.delete("sortValue");
+        window.location.href = url.href;
+    })
+    // thêm selected cho option
+    const Key = url.searchParams.get("sortKey");
+    const Value = url.searchParams.get("sortValue");
+    const stringSort = `${Key}-${Value}`;
+    if(Key && Value){
+        const option = sortSelect.querySelector(`[value="${stringSort}"]`);
+        if(option){
+            option.setAttribute("selected", true);
+        }
+    }
+}
+// end sort
